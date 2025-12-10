@@ -1,0 +1,4 @@
+id,pass,role,name
+admin,123,manager,Manager A
+client1,123,client,Client B
+ship1,123,estafeta,Shipper C
