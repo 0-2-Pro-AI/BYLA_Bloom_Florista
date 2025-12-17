@@ -52,7 +52,12 @@ def load_all_users_for_login():
 
 def load_products():
     if os.path.exists(FILE_PRODUCTS):
-        return pd.read_csv(FILE_PRODUCTS, sep=";", dtype=str)
+        return pd.read_csv(FILE_PRODUCTS, sep=";", dtype= {
+            "product_id": str,
+            "name_product": str,
+            "stock_quantity": int,
+            "price_unit": float
+        })
     return pd.DataFrame()
 
 
@@ -121,7 +126,13 @@ def save_order_events(df):
 def load_order_items():
     if os.path.exists(FILE_ORDERS_ITEMS):
         return pd.read_csv(
-            FILE_ORDERS_ITEMS, sep=";", dtype={"product_id": str}
+            FILE_ORDERS_ITEMS, sep=";", dtype={
+                "order_id": str,
+                "product_id": str,
+                "quantity_ordered": int,
+                "price_unit": float,
+                "subtotal": float
+            }
         )
     return pd.DataFrame(
         columns=[
