@@ -44,6 +44,7 @@ Este projeto está desenhado para gerir um portal de acesso tanto para **utiliza
 * **Gestão de Encomendas:** Yeidman
 * **Gestão de Clientes:** Beatriz
 * **Distribuição:** André Silva
+* **Reclamações e Avaliações, e `main`:** Tong Nguyen
 
 ---
 
@@ -77,6 +78,11 @@ Nesta fase inicial (V1), este módulo já replica a lógica do fluxograma origin
 ---
 
 ### 4. Distribuição (`mod_delivery.py`)
+*(Em desenvolvimento...)*
+
+---
+
+### 5. Reclamações e Avaliações (`mod_complaint.py`)
 *(Em desenvolvimento...)*
 
 ---
