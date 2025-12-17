@@ -1,14 +1,17 @@
 import pandas as pd
 
+df_zone = pd.read_csv("zp_zones.csv", sep=";", dtype=str)
+codes_list = df_zone['Codes'].tolist()
+
+
+# Mostrar os detalhes de um pedido específico, incluindo informações do pedido e itens associados.
 def showDetailsOrder(order_details, order_items_df, products_df):
     """
-    Muestra los detalles de un solo pedido, incluyendo la lista de productos
-    con sus nombres (en lugar de IDs).
-
-    Parameters:
-    order_details (DataFrame): DataFrame de una sola fila con los datos del pedido.
-    order_items_df (DataFrame): DataFrame con los artículos filtrados para ese pedido.
-    products_df (DataFrame): DataFrame completo con la información de los productos.
+    Mostrar os detalhes de um pedido específico, incluindo informações do pedido e itens associados.
+    Args:
+        order_details (pd.DataFrame): DataFrame contendo os detalhes do pedido.
+        order_items_df (pd.DataFrame): DataFrame contendo os itens do pedido.
+        products_df (pd.DataFrame): DataFrame contendo os produtos disponíveis.
     """
     if order_details.empty:
         print("Erro: Detalhes do pedido não encontrados.")
@@ -26,7 +29,16 @@ def showDetailsOrder(order_details, order_items_df, products_df):
     for key, value in details.items():
         print(f"{key}: {value}")
 
-    # Parte de los artículos - Realizar el merge para obtener el nombre del producto
+    """
+    Parte dos itens do pedido
+    Mostrar os itens do pedido com os nomes dos produtos correspondentes.
+    Args:
+        order_items_df (pd.DataFrame): DataFrame contendo os itens do pedido.
+        products_df (pd.DataFrame): DataFrame contendo os produtos disponíveis.
+    O a função .merge() é usada para combinar os DataFrames com base no 'product_id'.
+    Neste caso, usamos o merge para adicionar o 'name_product' do DataFrame de produtos ao DataFrame de itens do pedido,`
+    com o obejtivo de ter um dataframe completo com todas as informações necessárias para exibir os detalhes dos itens do pedido.
+    """
     merged_items = order_items_df.merge(
         products_df[["product_id", "name_product"]],
         on='product_id',
@@ -37,20 +49,25 @@ def showDetailsOrder(order_details, order_items_df, products_df):
     if merged_items.empty:
         print("Nenhum item encontrado para este pedido.")
     else:
-        # Iterar sobre los artículos y mostrarlos con el nombre del producto
+        # Iterar sobre os itens mesclados e exibir os detalhes
         for _, item in merged_items.iterrows():
             product_name = item['name_product'] if pd.notna(item['name_product']) else f"Produto ID: {item['product_id']} (Nome não encontrado)"
-            print(f"Produto: {product_name} | Quantidade: {item['quantity_ordered']} | Preço Unitário: {item['price_unit']} | Subtotal: {item['subtotal']}")
+            print(f"Produto: {product_name} | Quantidade: {item['quantity_ordered']} | Preço Unitário: {item['price_unit']}€ | Subtotal: {item['subtotal']}€")
+        print(f"---------------------------------------------------Total do Pedido: {merged_items['subtotal'].sum()}€")
+    return
 
-def showOrderStatus(df_orders):
+# Mostrar o estado de todos os pedidos
+def showOrderStatus(df_orders): # Mostrar o estado de todos os pedidos
     print("\n=== Encomendas ===")
     for _, row in df_orders.iterrows():
         print(f"ID: {row['order_id']} | Estado: {row['order_status']}")
     return
 
+# Validar se a opção escolhida está dentro das opções válidas
 def validoption(choice, valid_options):
     return choice in valid_options
 
+# Mostrar os detalhes do destinatário de um pedido específico
 def showDetailsDestinatario(order_details):
     if order_details.empty:
         print("Erro: Detalhes do pedido não encontrados.")
@@ -64,3 +81,72 @@ def showDetailsDestinatario(order_details):
                 }
     for key, value in details.items():
         print(f"{key}: {value}")
+    return 
+
+# Validar o endereço de um pedido específico
+def addressValidation(order_details):
+    df_address = order_details[['address', 'ZP1', 'ZP2']]
+    orderValid = True
+    reason = "Válida"
+    for _, row in df_address.iterrows():
+        if row['address'] == "" or pd.isna(row['address']) or len(row['address']) < 5:
+            orderValid = False
+            reason = "Morada inválida."
+            return orderValid, reason
+        if row['ZP1'] == "" or pd.isna(row['ZP1']) or not row['ZP1'].isdigit() or len(row['ZP1']) != 4 or row['ZP1'] not in codes_list:
+            reason = "Código Postal de distribuição inválido."
+            orderValid = False
+            return orderValid, reason
+        if row['ZP2'] == "" or pd.isna(row['ZP2']) or not row['ZP2'].isdigit() or len(row['ZP2']) != 3:
+            reason = "Código Postal (parte 2) inválido."
+            orderValid = False
+            return orderValid, reason
+
+    return orderValid, reason
+
+# Validar os dados do destinatário de um pedido específico
+def recipientValidation(order_details):
+    df_recipient = order_details[['name', 'contact']]
+    recipientValid = True
+    reason = "Válido"
+    for _, row in df_recipient.iterrows():
+        if row['name'] == "" or pd.isna(row['name']) or len(row['name']) < 3:
+            recipientValid = False
+            reason = "Nome do destinatário inválido."
+            return recipientValid, reason
+        if row['contact'] == "" or pd.isna(row['contact']) or len(row['contact']) < 9 or not row['contact'].isdigit() or row['contact'][0] not in ("9","2"):
+            reason = "Contacto do destinatário inválido."
+            recipientValid = False
+            return recipientValid, reason
+        
+    return recipientValid, reason
+
+# Validar o stock dos produtos de um pedido específico
+def stockValidation(order_items_df, products_df):
+    merged_items = order_items_df.merge(
+        products_df[["product_id", "name_product", "quantity_stock"]],
+        on='product_id',
+        how='left'
+    )
+    stockValid = True
+    reason = "Válido"
+    missing_products = []
+    insufficient_stock = []
+
+    for _, item in merged_items.iterrows():
+        if pd.isna(item['name_product']):
+            missing_products.append(item['product_id'])
+        elif item['quantity_ordered'] > item['quantity_stock']:
+            insufficient_stock.append(item['product_id'])
+    
+    if missing_products and insufficient_stock:
+        stockValid = False
+        reason = "Produtos em falta e stock insuficiente para os produtos."
+    elif missing_products:
+        stockValid = False
+        reason = "Produto(s) em falta."
+    elif insufficient_stock:
+        stockValid = False
+        reason = "Stock insuficiente para o(s) produto(s)."
+
+    return stockValid, reason, missing_products, insufficient_stock
