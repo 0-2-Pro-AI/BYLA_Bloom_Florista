@@ -63,7 +63,7 @@ Este módulo está na **V2.0** e já replica a lógica do Flowgorithm em Python.
 * ✅ **Estatísticas:** Cálculo do valor total em armazém.
 
 **Histórico:**
-* V2.0 (22/12/2024) - Conversão de Flowgorithm para Python
+* V2.0 (22/12/2024) - Refatorar if/else aninhados para elif 
 * V1.0 (13/12 2024) - Lógica original em Flowgorithm para python
 
 **Próximos passos:**

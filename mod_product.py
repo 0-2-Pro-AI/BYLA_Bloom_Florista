@@ -166,7 +166,7 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
             print("3 - Por Preço")
             print("4 - Por Stock")
             print("0 - Menu Principal")
-            opcao = int(input("Escolha: "))
+            opcao = lerInteiro("Escolha: ")
             
             # V3.1: Menu principal refatorado para elif (21/12)
             # OPÇÃO 1: Filtrar por Categoria
@@ -355,7 +355,7 @@ def adicionarStock(nomeProduto, stock, disponibilidade, numProdutos):
         print("---------------------------")
         
         print("\nQuantidade a adicionar: ")
-        quantidade = int(input())
+        quantidade = lerInteiro("Quantidade a adicionar: ")
         
         while quantidade <= 0:
             print("Erro: Quantidade tem que ser superior a 0!")
@@ -496,7 +496,7 @@ def verificarEncomenda(stock, disponibilidade, numProdutos, nomeProduto, precosP
         
         while numItemEscolhido < 1 or numItemEscolhido > numProdutos:
             print("❌ ID/Nº Artigo Inválido!")
-            numItemEscolhido = int(input("Insira ID válido: "))
+            numItemEscolhido = lerInteiro("Insira ID válido: ")
         
         i = numItemEscolhido - 1
         
