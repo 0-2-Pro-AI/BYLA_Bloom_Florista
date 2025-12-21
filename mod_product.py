@@ -2,6 +2,28 @@
 
 import pandas as pd
 
+# V3.2: Funções de Input Válido (21/12)
+
+def lerInteiro(mensagem=""):
+    
+    # Lê inteiro com proteção contra crashes - inserir texto em vez de número Inteiro (21/12).
+    while True:
+        try:
+            valor = int(input(mensagem))
+            return valor
+        except ValueError:
+            print("❌ Erro: Insira apenas números inteiros!")
+
+
+def lerFloat(mensagem=""):
+    
+    # Lê float com proteção contra crashes - inserir texto em vez de número (21/12). 
+    while True:
+        try:
+            valor = float(input(mensagem))
+            return valor
+        except ValueError:
+            print("❌ Erro: Insira apenas números!")
 
 def adicionarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos):
     
@@ -52,12 +74,14 @@ def alterarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProdut
 
     if numProdutos > 0:
         print("Insira o ID/Nº que pretende alterar: ")
-        numItemEscolhido = int(input())
+        numItemEscolhido = lerInteiro()
+        # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
 
         while numItemEscolhido < 1 or numItemEscolhido > numProdutos:
             print("❌ ID/Nº Artigo Inválido!")
             print("Insira um ID entre 1 e " + str(numProdutos))
-            numItemEscolhido = int(input())
+            numItemEscolhido = lerInteiro()
+            # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
 
         # Este Assign serve para não ultrapassar o fim da lista/Array
         i = numItemEscolhido - 1
@@ -83,7 +107,8 @@ def alterarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProdut
             print("0. Concluir Alterações")
 
             # Lê a opção do utilizador.
-            opcaomenu = int(input())  
+            # V3.2: Utiliza função de input seguro para ler a opção do menu (21/12)
+            opcaomenu = lerInteiro()  
 
             # V3.1: Refatorado para elif (22/12) - Mesma lógica Flowgorithm, código mais limpo!
             if opcaomenu == 1:
@@ -186,7 +211,8 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
                 print("1. Preço igual a")
                 print("2. Preço acima de")
                 print("3. Preço abaixo de")
-                opcaoPreco = int(input())
+                opcaoPreco = lerInteiro()
+                # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
                 
                 # V3.1: Submenu preço refatorado para elif (21/12)
                 if opcaoPreco >= 1 and opcaoPreco <= 3:
@@ -227,7 +253,7 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
                 print("1. Stock igual a")
                 print("2. Stock acima de")
                 print("3. Stock abaixo de")
-                opcaoStock = int(input())
+                opcaoStock = lerInteiro()
                 
                 # V3.1: Submenu stock refatorado para elif (22/12)
                 if opcaoStock >= 1 and opcaoStock <= 3:
@@ -311,12 +337,14 @@ def adicionarStock(nomeProduto, stock, disponibilidade, numProdutos):
     if numProdutos > 0:
         print("\n📥 ===== Adicionar Stock ===== 📥")
         print("\nInsira o ID do produto para adicionar stock: ")
-        idEscolhido = int(input())
+        idEscolhido = lerInteiro()
+        # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
         
         while idEscolhido < 1 or idEscolhido > numProdutos:
             print("❌ ID inválido!")
             print("Insira um ID entre 1 e " + str(numProdutos))
-            idEscolhido = int(input())
+            idEscolhido = lerInteiro()
+            # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
         
         i = idEscolhido - 1
         
@@ -331,7 +359,8 @@ def adicionarStock(nomeProduto, stock, disponibilidade, numProdutos):
         
         while quantidade <= 0:
             print("Erro: Quantidade tem que ser superior a 0!")
-            quantidade = int(input("Quantidade a adicionar: "))
+            quantidade = lerInteiro("Quantidade a adicionar: ")
+            # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
         
         stockAntigo = stock[i]
         stock[i] = stock[i] + quantidade
@@ -355,14 +384,16 @@ def removerProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProdut
 
     if numProdutos > 0:
         print("Insira o ID do produto a remover: ")
-        idEscolhido = int(input())
+        idEscolhido = lerInteiro()
+        # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
         
         # Validação de ID (similar a alterarProduto)
         while idEscolhido < 1 or idEscolhido > numProdutos:
             print("❌ ID inválido!")
             print("Insira um ID entre 1 e " + str(numProdutos))
-            idEscolhido = int(input())
-        
+            idEscolhido = lerInteiro()
+        # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
+
         i = idEscolhido - 1
         
         # Usar múltiplos prints (mais claro que um print com \n múltiplos)
@@ -413,17 +444,16 @@ def validarNome():
     
     return nome
 
-def validarStock():
-    # Função para validar Stock inserido (evitar negativos)
-    print("Insira a quantidade de produto para stock: ")
-    stock = int(input())
 
-    # Condição utilizada para evitar stock negativo
+    # Função para validar stock (evitar negativos) - atualizada 21/12
+def validarStock():
+    print("Insira a quantidade de produto para stock: ")
+    stock = lerInteiro()
     while stock < 0:
         print("Erro: O stock do produto não pode ser negativo! Volte a inserir, por favor!")
-        stock = int(input())
-    
+        stock = lerInteiro()
     return stock
+
 
 def verificarDisponibilidade(opcaoOperacao):
     
@@ -462,7 +492,7 @@ def verificarEncomenda(stock, disponibilidade, numProdutos, nomeProduto, precosP
             print("ID: " + str(i + 1) + " | Nome: " + nomeProduto[i] + " | Preço: " + str(precosProduto[i]) + "€" + " | Stock: " + str(stock[i]))
         
         print("\nQual o nº do item/ID que deseja encomendar: ")
-        numItemEscolhido = int(input())
+        numItemEscolhido = lerInteiro()
         
         while numItemEscolhido < 1 or numItemEscolhido > numProdutos:
             print("❌ ID/Nº Artigo Inválido!")
@@ -486,13 +516,15 @@ def verificarEncomenda(stock, disponibilidade, numProdutos, nomeProduto, precosP
                 print("Não é possível encomendar neste momento.")
             else:
                 print("\nInsira a quantidade a encomendar: ")
-                encomenda = int(input())
-                
+                encomenda = lerInteiro()
+                # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
+
                 while encomenda <= 0:
                     print("Erro: Quantidade tem que ser superior a 0!")
                     print("Insira a quantidade a encomendar: ")
-                    encomenda = int(input())
-                
+                    encomenda = lerInteiro()
+                    # V3.2: Utiliza função de input seguro para ler o número do item (21/12)
+
                 if encomenda <= stock[i]:
                     stock[i] = stock[i] - encomenda
                     print("\n✅ Encomenda realizada com sucesso!")
@@ -541,14 +573,13 @@ def verificarEstatisticas(precosProduto, categoriaProduto, stock, disponibilidad
     else:
         print("❌ Catálogo vazio. Não é possível fornecer estatísticas.")
 
+# Função para validar preço (evitar negativos) - atualizada 21/12
 def verificarPreco():
-    # 7/11 - Função para validar preço inserido
     print("Insira o Preço: ")
-    preco = float(input())
+    preco =lerFloat()
     while preco < 0:
         print("Erro: O Preço do produto não pode ser negativo! Volte a inserir, por favor!")
-        preco = float(input())
-    
+        preco =lerFloat()
     return preco
 
 # Main
@@ -616,7 +647,8 @@ while opcaoMenu != 0:
     print("0. Sair 👋")
     print()
     
-    opcaoMenu = int(input("Escolha uma opção: "))
+    # V3.2: Utiliza função de input seguro para ler a opção do menu (21/12)
+    opcaoMenu = lerInteiro("Escolha uma opção: ")
     
     # V3.1: Refatorado para elif (22/12) - Mesma lógica Flowgorithm, código mais limpo
     if opcaoMenu == 1:
