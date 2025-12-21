@@ -47,7 +47,7 @@ def adicionarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProd
 
 def alterarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos):
     # NOTA: O stock não é alterado aqui para garantir a integridade das opções 6 e 7 (Saídas/Entradas)
-    # Pemite alterar dados de um produto (16/12)
+    # Permite alterar dados de um produto (16/12)
     opcaomenu = -1
 
     if numProdutos > 0:
@@ -82,46 +82,46 @@ def alterarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProdut
             print("5. Alterar Disponibilidade")
             print("0. Concluir Alterações")
 
-            opcaomenu = int(input()) # Lê a opção do utilizador.
+            # Lê a opção do utilizador.
+            opcaomenu = int(input())  
 
+            # V3.1: Refatorado para elif (22/12) - Mesma lógica Flowgorithm, código mais limpo!
             if opcaomenu == 1:
                 nomeProduto[i] = validarNome()
                 print("Nome alterado com sucesso!")
-            else:
-                if opcaomenu == 2:
+            elif opcaomenu == 2:
+                print("Insira a nova Descrição: ")
+                novaDescricao = input()
+                # Nova validação para descrição não vazia
+                while len(novaDescricao) == 0:
+                    print("Erro: Descrição tem que ter mais que 1 carater!")
                     print("Insira a nova Descrição: ")
                     novaDescricao = input()
-                    # Nova validação para descrição não vazia
-                    while len(novaDescricao) == 0:
-                        print("Erro: Descrição tem que ter mais que 1 carater!")
-                        print("Insira a nova Descrição: ")
-                        novaDescricao = input()
-                    descricaoProduto[i] = novaDescricao
-                    print("Descrição alterada com sucesso!")
-                else:
-                    if opcaomenu == 3:
-                        print("Escreva nova categoria: ")
-                        novaCategoria = input()
-                        # Validação para categoria não vazia
-                        while len(novaCategoria) == 0:
-                            print("Erro: Categoria tem que ter mais que 1 carater!")
-                            print("Escreva nova categoria: ")
-                            novaCategoria = input()
-                        categoriaProduto[i] = novaCategoria
-                        print("Categoria alterada com sucessso!")
-                    else:
-                        if opcaomenu == 4:
-                            precosProduto[i] = verificarPreco()
-                            print("Preço alterado com sucessso!")
-                        else:
-                            if opcaomenu == 5:
-                                disponibilidade[i] = verificarDisponibilidade(1)
-                                print("Disponibilidade alterada com sucessso!")
-                            else:
-                                if opcaomenu == 0:
-                                    print("Alterações Concluidas!")
+                descricaoProduto[i] = novaDescricao
+                print("Descrição alterada com sucesso!")
+            elif opcaomenu == 3:
+                print("Escreva nova categoria: ")
+                novaCategoria = input()
+                # Validação para categoria não vazia
+                while len(novaCategoria) == 0:
+                    print("Erro: Categoria tem que ter mais que 1 carater!")
+                    print("Escreva nova categoria: ")
+                    novaCategoria = input()
+                categoriaProduto[i] = novaCategoria
+                print("Categoria alterada com sucesso!")
+            elif opcaomenu == 4:
+                precosProduto[i] = verificarPreco()
+                print("Preço alterado com sucesso!")
+            elif opcaomenu == 5:
+                disponibilidade[i] = verificarDisponibilidade(1)
+                print("Disponibilidade alterada com sucesso!")
+            elif opcaomenu == 0:
+                print("Alterações Concluídas!")
+            else:
+                print("Opção inválida!")
     else:
         print("O Catálogo está vazio!")
+
 
 def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos):
     
@@ -143,6 +143,7 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
             print("0 - Menu Principal")
             opcao = int(input("Escolha: "))
             
+            # V3.1: Menu principal refatorado para elif (21/12)
             # OPÇÃO 1: Filtrar por Categoria
             if opcao == 1:
                 print("Insira a categoria pela qual deseja filtrar: ")
@@ -171,8 +172,8 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
                             print("ID: " + str(i + 1) + " | Nome: " + nomeProduto[i] + " | Disponibilidade: " + disponibilidade[i] + " - está esgotado!")
                         else:
                             print("ID: " + str(i + 1) + " | Nome: " + nomeProduto[i] + " | Disponibilidade: " + disponibilidade[i])
-                             
-                             # Se encontrou pelo menos 1, então:
+                        
+                        # Se encontrou pelo menos 1, então:
                         resultadoFiltro = True
 
                 # Se não encontrou nenhum:
@@ -187,6 +188,7 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
                 print("3. Preço abaixo de")
                 opcaoPreco = int(input())
                 
+                # V3.1: Submenu preço refatorado para elif (21/12)
                 if opcaoPreco >= 1 and opcaoPreco <= 3:
                     filtroPreco = verificarPreco()
                     
@@ -227,6 +229,7 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
                 print("3. Stock abaixo de")
                 opcaoStock = int(input())
                 
+                # V3.1: Submenu stock refatorado para elif (22/12)
                 if opcaoStock >= 1 and opcaoStock <= 3:
                     filtroStock = validarStock()
                     
@@ -259,7 +262,7 @@ def filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProdu
                 else:
                     print("❌ Opção inválida!")
             
-            # OPÇÃO 0: Voltar
+            # OPÇÃO 0 = Voltar
             elif opcao == 0:
                 print("↩️ Menu Principal")
             
@@ -423,27 +426,26 @@ def validarStock():
     return stock
 
 def verificarDisponibilidade(opcaoOperacao):
-    # Função que muda a pergunta consoante o parametro (1, 2, 3)
-    # Variável inicializada vazia
+    
+    # Função que muda a pergunta consoante o parâmetro (1, 2, 3)
+    # V3.1: Refatorado para elif + aceitar minúsculas (22/12)
+    
     disponibilidade = ""
 
-    # Utilizada para definir estado em Adicionar e Alterar produto
+    # V3.1: Refatorado else/if → elif (21/12)
     if opcaoOperacao == 1:
         print("Informe se está disponível(S/N): ")
-    else:
+    elif opcaoOperacao == 2:
+        print("Disponibilidade desejada (S - Disponível / N - Indisponível): ")
+    elif opcaoOperacao == 3:
+        print("⚠️ Tem a certeza que deseja remover o produto(S/N)?")
 
-        # Utilizada para questionar qual o estado que pretende filtrar
-        if opcaoOperacao == 2:
-            print("Disponibilidade desejada (S - Disponível / N - Indisponível): ")
-        else:
-
-            # Validação de segurança para remover produto
-            if opcaoOperacao == 3:
-                print("⚠️ Tem a certeza que deseja remover o produto(S/N)?")
-    disponibilidade = input()
+    # V3.1: Aceitar minúsculas (21/12)
+    disponibilidade = input().upper()  
+    
     while disponibilidade != "S" and disponibilidade != "N":
         print("Erro: Opção inválida. Insira apenas 'S' ou 'N': ")
-        disponibilidade = input()
+        disponibilidade = input().upper()
     
     return disponibilidade
 
@@ -616,40 +618,32 @@ while opcaoMenu != 0:
     
     opcaoMenu = int(input("Escolha uma opção: "))
     
-    # Lógica para Adicionar Produto aqui
+    # V3.1: Refatorado para elif (22/12) - Mesma lógica Flowgorithm, código mais limpo
     if opcaoMenu == 1:
         # Chama função para criar o registo do item
         numProdutos = adicionarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
+    elif opcaoMenu == 2:
+        # Chama função para alterar dados pré-definidos ou inseridos
+        alterarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
+    elif opcaoMenu == 3:
+        # Chama função para apagar registo
+        numProdutos = removerProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
+    elif opcaoMenu == 4:
+        # Função para mostrar todos os dados em formato catálogo
+        listarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
+    elif opcaoMenu == 5:
+        # Função para mostrar todos os dados de uma filtragem requisitada
+        filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
+    elif opcaoMenu == 6:
+        # Função que simula a saída de stock
+        verificarEncomenda(stock, disponibilidade, numProdutos, nomeProduto, precosProduto)
+    elif opcaoMenu == 7:
+        # Função que simula a entrada de stock
+        adicionarStock(nomeProduto, stock, disponibilidade, numProdutos)
+    elif opcaoMenu == 8:
+        # Funcionalidade extra da parte 2 enunciado
+        verificarEstatisticas(precosProduto, categoriaProduto, stock, disponibilidade, numProdutos)
+    elif opcaoMenu == 0:
+        print("👋 A sair da aplicação...")
     else:
-        if opcaoMenu == 2:
-            # Chama função para alterar dados pré-definidos ou inseridos
-            alterarProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
-        else:
-            if opcaoMenu == 3:
-                # Chama função para apagar registo
-                numProdutos = removerProduto(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
-            else:
-                if opcaoMenu == 4:
-                    # Função para mostrar todos os dados em formato catálogo
-                    listarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
-                else:
-                    if opcaoMenu == 5:
-                        # Função para mostrar todos os dados de uma filtragem requisitada
-                        filtrarCatalogo(nomeProduto, descricaoProduto, categoriaProduto, precosProduto, stock, disponibilidade, numProdutos)
-                    else:
-                        if opcaoMenu == 6:
-                            # Função que simula a saída de stock
-                            verificarEncomenda(stock, disponibilidade, numProdutos, nomeProduto, precosProduto)
-                        else:
-                            if opcaoMenu == 7:
-                                # Função que simula a entrada de stock
-                                adicionarStock(nomeProduto, stock, disponibilidade, numProdutos)
-                            else:
-                                if opcaoMenu == 8:
-                                    # Funcionalidade extra da parte 2 enunciado
-                                    verificarEstatisticas(precosProduto, categoriaProduto, stock, disponibilidade, numProdutos)
-                                else:
-                                    if opcaoMenu == 0:
-                                        print("👋 A sair da aplicação...")
-                                    else:
-                                        print("Opção inválida. Insira um número de 0 a 8 e tente novamente.")
+        print("Opção inválida. Insira um número de 0 a 8 e tente novamente.")
