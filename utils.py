@@ -18,7 +18,7 @@ def showDetailsOrder(order_details, order_items_df, products_df):
         return
 
     # Parte de los detalles del pedido
-    print("=== Detalhes do Pedido ===")
+    print("\n=== Detalhes do Pedido ===")
     details = {"Numero do Pedido": order_details.iloc[0]['order_id'],
                 "Nome do Cliente": order_details.iloc[0]['name'],
                 "Contacto": order_details.iloc[0]['contact'],
@@ -45,7 +45,7 @@ def showDetailsOrder(order_details, order_items_df, products_df):
         how='left'
     )
 
-    print("\n=== Itens do Pedido ===")
+    print("=== Itens do Pedido ===")
     if merged_items.empty:
         print("Nenhum item encontrado para este pedido.")
     else:
@@ -53,7 +53,7 @@ def showDetailsOrder(order_details, order_items_df, products_df):
         for _, item in merged_items.iterrows():
             product_name = item['name_product'] if pd.notna(item['name_product']) else f"Produto ID: {item['product_id']} (Nome não encontrado)"
             print(f"Produto: {product_name} | Quantidade: {item['quantity_ordered']} | Preço Unitário: {item['price_unit']}€ | Subtotal: {item['subtotal']}€")
-        print(f"---------------------------------------------------Total do Pedido: {merged_items['subtotal'].sum()}€")
+        print(f"---------------------------------------------------Total do Pedido: {merged_items['subtotal'].sum()}€\n")
     return
 
 # Mostrar o estado de todos os pedidos
@@ -124,17 +124,18 @@ def recipientValidation(order_details):
 # Validar o stock dos produtos de um pedido específico
 def stockValidation(order_items_df, products_df):
     merged_items = order_items_df.merge(
-        products_df[["product_id", "name_product", "quantity_stock"]],
+        products_df[["product_id", "name_product", "quantity_stock", "available"]],
         on='product_id',
         how='left'
     )
     stockValid = True
     reason = "Válido"
+    # Listas para armazenar produtos em falta e com stock insuficiente
     missing_products = []
     insufficient_stock = []
 
     for _, item in merged_items.iterrows():
-        if pd.isna(item['name_product']):
+        if item['available'] == "N":
             missing_products.append(item['product_id'])
         elif item['quantity_ordered'] > item['quantity_stock']:
             insufficient_stock.append(item['product_id'])
@@ -150,3 +151,16 @@ def stockValidation(order_items_df, products_df):
         reason = "Stock insuficiente para o(s) produto(s)."
 
     return stockValid, reason, missing_products, insufficient_stock
+
+# return Stock, funçao que recebe um df de order_it e adiciona os items cancelados a products_df
+def return_stock (order_items_df_canceled, products_df):
+   
+    for _, item in order_items_df_canceled.iterrows():
+        pid = item["product_id"]
+        ordered = int(item["quantity_ordered"])
+        
+        products_df.loc[products_df["product_id"] == pid, "quantity_stock"] += ordered
+        
+    return products_df
+
+
