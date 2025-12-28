@@ -50,9 +50,8 @@ Este projeto está desenhado para gerir um portal de acesso tanto para **utiliza
 
 ## 🚧 Estado dos Módulos
 
-### 1. Gestão de Produtos (`mod_product.py`)  - ✅ V2.0 COMPLETO
-
-Este módulo está na **V2.0** e já replica a lógica do Flowgorithm em Python. Ainda não utiliza ficheiros (CSV) nem Pandas, mantendo os dados em listas/arrays na memória durante a execução.
+### 1. Gestão de Produtos (`mod_product.py`)  - ✅ V4.0 (Atualmente)
+Este módulo está na **V5.0** e já replica a lógica do Flowgorithm em Python com integração completa. Utiliza ficheiros CSV e Pandas, mantendo os dados em listas/arrays na memória durante a execução.
 
 **O que já funciona:**
 * ✅ **Catálogo:** Listagem completa de flores e plantas.
@@ -61,15 +60,18 @@ Este módulo está na **V2.0** e já replica a lógica do Flowgorithm em Python.
 * ✅ **Filtros:** Por categoria, disponibilidade, preço e stock.
 * ✅ **Validações:** Impede preços negativos, nomes vazios e IDs inválidos.
 * ✅ **Estatísticas:** Cálculo do valor total em armazém.
+* ✅ **Integração:** 5 funções prontas para módulos de Encomendas e Portal Cliente
+* ✅ **Persistência:** Guardar/carregar automático em CSV
 
 **Histórico:**
-* V2.0 (22/12/2024) - Refatorar if/else aninhados para elif 
+* V5.0 (28/12/2024) - Integração completa: funções para outros módulos + correções estrutura dados
+* V4.0 (23/12/2024) - Persistência CSV implementada
+* V3.0 (22/12/2024) - Refatoração - funções de validação + organização do código
+* V2.0 (21/12/2024) - Refatorar if/else aninhados para elif 
 * V1.0 (13/12 2024) - Lógica original em Flowgorithm para python
 
 **Próximos passos:**
-* Implementar persistência de dados (CSV).
-* Integração com Pandas (Parte II).
-
+* Testes de integração com módulos do grupo
 ---
 
 ### 2. Gestão de Encomendas (`mod_delivery.py`)
