@@ -38,17 +38,16 @@ def load_all_users_for_login():
 
                 all_users.append(
                     {
-                        "id": str(row["login"]),
+                        "id": str(row["id_worker"]),
                         "pass": str(row["password"]),
                         "role": user_role,
-                        "name": str(row["login"]),
+                        "name": str(row["id_worker"]),
                     }
                 )
         except Exception as e:
             print(f"⚠ Lỗi đọc Staff: {e}")
 
     return pd.DataFrame(all_users)
-
 
 def load_products():
     if os.path.exists(FILE_PRODUCTS):
@@ -60,10 +59,8 @@ def load_products():
         })
     return pd.DataFrame()
 
-
 def save_products(df):
     df.to_csv(FILE_PRODUCTS, index=False, sep=";")
-
 
 def load_orders():
     if os.path.exists(FILE_ORDERS):
@@ -84,7 +81,6 @@ def load_orders():
 def save_orders(df):
     df.to_csv(FILE_ORDERS, index=False, sep=";")
 
-
 def load_complaints():
     if os.path.exists(FILE_COMPLAINTS):
         df = pd.read_csv(FILE_COMPLAINTS, sep=';', dtype=str, encoding='utf-8-sig')
@@ -103,10 +99,8 @@ def load_complaints():
         "status"
     ])
 
-
 def save_complaints(df):
     df.to_csv(FILE_COMPLAINTS, index=False, sep=';', encoding='utf-8-sig')
-
 
 def load_order_events():
     if os.path.exists(FILE_ENEVENTS):
@@ -118,10 +112,8 @@ def load_order_events():
         ]
     )
 
-
 def save_order_events(df):
     df.to_csv(FILE_ENEVENTS, index=False, sep=";")
-
 
 def load_order_items():
     if os.path.exists(FILE_ORDERS_ITEMS):
@@ -141,6 +133,19 @@ def load_order_items():
         ]
     )
 
-
 def save_order_items(df):
     df.to_csv(FILE_ORDERS_ITEMS, index=False, sep=";")
+
+def load_user_work_profil():
+    if os.path.exists(FILE_STAFF):
+        return pd.read_csv(FILE_STAFF, sep=";", dtype=str)
+    else:
+        return pd.DataFrame(
+            columns=[
+                "id_worker",
+                "password",
+                "duty_area",
+                "work_hour"
+            ]
+
+        )   
