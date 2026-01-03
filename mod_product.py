@@ -566,7 +566,6 @@ def verificarEncomenda(nomeProduto, descricaoProduto, categoriaProduto, precosPr
     else:
         print("❌ Catálogo vazio. Não existe stock!")
 
-
 # Função para mostrar estatísticas do catálogo
 def verificarEstatisticas(precosProduto, categoriaProduto, stock, disponibilidade, numProdutos):
     

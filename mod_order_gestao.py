@@ -4,6 +4,7 @@ import pandas as pd
 import datetime as dtime
 from data_manager import load_orders, save_orders, load_products, save_products, load_order_events, save_order_events, load_order_items, save_order_items
 import utils as ut
+import random as rd
 
 
 #def ModOrderGestao(Manager):
@@ -35,12 +36,12 @@ def initOrderManagementMenu():
         return choice
 
 #Menu Editar Pedidos
-def EditOrder():
+def EditOrder(IdOrder):
     validOption = False
     
     while not validOption:
 
-        print("===Editar Pedido===")
+        print(f"===Editar Pedido: {IdOrder} ===")
         print("1. Editar nome e apelido do destinatário")
         print("2. Editar contacto do destinatário")
         print("3. Editar morada do destinatário")
@@ -112,7 +113,7 @@ while MenuInitial:
 
                         editMenu = True
                         while editMenu:
-                            editChoice = EditOrder()
+                            editChoice = EditOrder(userInput)
                             if editChoice == '1':
                                 new_name = input("Insira o novo nome e apelido do destinatário: ")
 
@@ -447,5 +448,54 @@ while MenuInitial:
                     i = total_orders
 
     elif option == '3':
+        # Mostrar pedidos cancelados
         canceled_orders = orders_df[orders_df['order_status'] == 'canceled'].reset_index(drop=True)
-        
+
+        print("\n======================================")
+        print("=== Encomendas Canceladas ===")
+        print("======================================")
+
+        if canceled_orders.empty:
+            print("\nNão existem encomendas canceladas.\n")
+        else:
+            i = 0
+            total_orders = len(canceled_orders)
+            print("\n======================================")
+            print(f"=== Total de encomendas canceladas: {total_orders}===")
+            print("======================================")
+
+
+            while i < total_orders:
+                order = canceled_orders.iloc[i]
+
+                print("\n======================================")
+                print(f"ID: {order['order_id']} | Motivo de cancelamento: {order['order_reason']}")
+                print(f"Destinatário: {order['name']} | Contacto: {order['contact']}")
+                print(f"Morada: {order['address']}")
+                print(f"Código Postal: {order['ZP1']}-{order['ZP2']}")
+                print("======================================")
+
+
+                if i < total_orders - 1:
+                    # Ainda há próximas encomendas
+                    while True:
+                        print("Escolha uma das seguintes opções")
+                        print("1. Seguinte encomenda")
+                        print("2. Sair")
+                        resp = input("Opção: ").strip().lower()
+                        if resp == '1':
+                            i += 1      # passa ao próximo pedido
+                            break
+                        elif resp == '2':
+                            print("A regressar ao menu inicial...")
+                            i = total_orders   # força saída do while
+                            break
+                        else:
+                            print("Opção inválida. Escreva '1' para ver a seguiente encomenda\n ou '2' para sair.")
+                else:
+                    # Última encomenda
+                    input("Última encomenda. Prima ENTER para voltar ao menu inicial.")
+                    i = total_orders
+
+    elif option == '4':
+        pass
