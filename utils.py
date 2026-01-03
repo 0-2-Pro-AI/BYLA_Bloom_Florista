@@ -1,8 +1,12 @@
 import pandas as pd
 import datetime as dtime
+import random as rd
+import data_manager as dm
+
 
 df_zone = pd.read_csv("zp_zones.csv", sep=";", dtype=str)
 codes_list = df_zone['Codes'].tolist()
+df_user_worker = dm.load_user_work_profil()
 
 # Mostrar os detalhes de um pedido específico, incluindo informações do pedido e itens associados.
 def showDetailsOrder(order_details, order_items_df, products_df):
@@ -117,33 +121,18 @@ def recipientValidation(order_details):
 # Validar o stock dos produtos de um pedido específico
 def stockValidation(order_items_df, products_df):
     merged_items = order_items_df.merge(
-        products_df[["product_id", "name_product", "quantity_stock", "available"]],
+        products_df[["product_id", "available"]],
         on='product_id',
         how='left'
     )
-    stockValid = True
-    reason = "Válido"
     # Listas para armazenar produtos em falta e com stock insuficiente
     missing_products = []
-    insufficient_stock = []
-
+    
     for _, item in merged_items.iterrows():
         if item['available'] == "N":
             missing_products.append(item['product_id'])
-        elif item['quantity_ordered'] > item['quantity_stock']:
-            insufficient_stock.append(item['product_id'])
-    
-    if missing_products and insufficient_stock:
-        stockValid = False
-        reason = "Produtos em falta e stock insuficiente para os produtos."
-    elif missing_products:
-        stockValid = False
-        reason = "Produto(s) em falta."
-    elif insufficient_stock:
-        stockValid = False
-        reason = "Stock insuficiente para o(s) produto(s)."
-
-    return stockValid, reason, missing_products, insufficient_stock
+                
+    return missing_products
 
 # return Stock, funçao que recebe um df de order_it e adiciona os items cancelados a products_df
 def return_stock (order_items_df_canceled, products_df):
@@ -191,3 +180,6 @@ def reject_order(order_id, orders_df, order_it, products_df, order_events_df, ma
     save_order_events(order_events_df)
 
     return orders_df, order_it, products_df, order_events_df
+
+def assing_employee():
+    pass

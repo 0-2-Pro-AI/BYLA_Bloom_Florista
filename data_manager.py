@@ -66,10 +66,6 @@ def save_products(df):
 def load_orders():
     if os.path.exists(FILE_ORDERS):
         df = pd.read_csv(FILE_ORDERS, sep=";", dtype=str)
-        df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
-        df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
-        df['staptime_1'] = pd.to_datetime(df['staptime_1'], errors='coerce')
-        df['staptime_2'] = pd.to_datetime(df['staptime_2'], errors='coerce')
         return df
     return pd.DataFrame(columns= [
     "order_id",
@@ -81,10 +77,6 @@ def load_orders():
     "ZP2",
     "order_status",
     "order_reason",
-   "staptime_1",
-    "staptime_2",
-   "latitude",
-    "longitude",
     "id_worker"
 ])
 
@@ -115,12 +107,22 @@ def save_complaints(df):
 def load_order_events():
     if os.path.exists(FILE_ENEVENTS):
         df = pd.read_csv(FILE_ENEVENTS, sep=";")
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
+        df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
+        df['staptime_1'] = pd.to_datetime(df['staptime_1'], errors='coerce')
+        df['staptime_2'] = pd.to_datetime(df['staptime_2'], errors='coerce')
         return df
     return pd.DataFrame(
         columns=[
-            "event_id", "order_id", "order_status",
-            "timestamp", "login", "reason"
+            "event_id",
+            "order_id",
+            "event_type",
+            "staptime_1",
+            "staptime_2",
+            "login",
+            "details",
+            "latitude",
+            "longitude"
         ]
     )
 
