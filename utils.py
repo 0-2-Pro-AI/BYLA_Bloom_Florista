@@ -181,5 +181,17 @@ def reject_order(order_id, orders_df, order_it, products_df, order_events_df, ma
 
     return orders_df, order_it, products_df, order_events_df
 
-def assing_employee():
-    pass
+# Zona do código postal e estafeta random
+def code_zone(ZP1, df_zones, df_user_workers):  
+    if ZP1 in df_zones['Codes'].values:  
+        zone = df_zones.loc[df_zones['Codes'] == ZP1, 'Zone'].iloc[0]
+        estafetas = df_user_workers[df_user_workers['dutyArea'] == zone]["id_worker"].tolist()
+        if estafetas:
+            estafeta = rd.choice(estafetas)
+        else:
+            estafeta = '1001'
+    else:
+        estafeta = '1001'
+        zone = "Fora do limite"
+    
+    return estafeta, zone

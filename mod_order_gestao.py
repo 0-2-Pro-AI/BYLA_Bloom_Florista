@@ -2,7 +2,7 @@
 
 import pandas as pd
 import datetime as dtime
-from data_manager import load_orders, save_orders, load_products, save_products, load_order_events, save_order_events, load_order_items, save_order_items
+from data_manager import load_orders, save_orders, load_products, save_products, load_order_events, save_order_events, load_order_items, save_order_items, load_user_work_profil
 import utils as ut
 import random as rd
 
@@ -13,6 +13,8 @@ if Manager == "SUPm":
     isSupervisor = True
 else:
     isSupervisor = False
+
+df_zone = pd.read_csv("zp_zones.csv", sep=";", dtype=str)
 
 def initOrderManagementMenu():
         ValidOption = False
@@ -123,16 +125,19 @@ while MenuInitial:
                                 print("Nome e apelido atualizados com sucesso.")                        
                                 update_order = orders_df[orders_df['order_id'] == userInput]
                                 ut.showDetailsDestinatario(update_order)
+                                
                                 #Registrar evento
-                                # Adicionar nova linha ao DataFrame de eventos
                                 new_event = {
-                                    'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                                    'order_id': userInput,
-                                    'event_type': 'edit_recipient_name',
-                                    'timestamp': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                    'login': Manager,
-                                    'details': f"Nome do destinatário alterado para: {new_name}"
-                                }
+                                            'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                                            'order_id': userInput,
+                                            'event_type': 'edit_recipient_name',
+                                            'staptime_1': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # ← tua coluna
+                                            'staptime_2': '',          
+                                            'login': Manager,
+                                            'details': f"Nome do destinatário alterado para: {new_name}",
+                                            'latitude': '',             
+                                            'longitude': '',       
+                                            }
                                 order_events_df = pd.concat([order_events_df, pd.DataFrame([new_event])], ignore_index=True)
                                 save_order_events(order_events_df)
                                 print("Deseja continuar a editar este pedido? (s/n)")
@@ -152,13 +157,16 @@ while MenuInitial:
                                 #Registrar evento
                                 # Adicionar nova linha ao DataFrame de eventos
                                 new_event = {
-                                    'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                                    'order_id': userInput,
-                                    'event_type': 'edit_recipient_contact',
-                                    'timestamp': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                    'login': Manager,
-                                    'details': f"Contacto do destinatário alterado para: {new_contact}"
-                                }
+                                            'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                                            'order_id': userInput,
+                                            'event_type': 'edit_recipient_name',
+                                            'staptime_1': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # ← tua coluna
+                                            'staptime_2': '',          
+                                            'login': Manager,
+                                            'details': f"Contacto do destinatário alterado para: {new_contact}",
+                                            'latitude': '',             
+                                            'longitude': '',       
+                                            }
                                 order_events_df = pd.concat([order_events_df, pd.DataFrame([new_event])], ignore_index=True)
                                 save_order_events(order_events_df)
 
@@ -180,13 +188,16 @@ while MenuInitial:
                                 #Registrar evento
                                 # Adicionar nova linha ao DataFrame de eventos
                                 new_event = {
-                                    'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                                    'order_id': userInput,
-                                    'event_type': 'edit_recipient_address',
-                                    'timestamp': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                    'login': Manager,
-                                    'details': f"Morada do destinatário alterada para: {new_address}"
-                                }
+                                            'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                                            'order_id': userInput,
+                                            'event_type': 'edit_recipient_name',
+                                            'staptime_1': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # ← tua coluna
+                                            'staptime_2': '',          
+                                            'login': Manager,
+                                            'details': f"Morada do destinatário alterada para: {new_address}",
+                                            'latitude': '',             
+                                            'longitude': '',       
+                                            }
                                 order_events_df = pd.concat([order_events_df, pd.DataFrame([new_event])], ignore_index=True)
                                 save_order_events(order_events_df)
 
@@ -210,13 +221,16 @@ while MenuInitial:
                                 #Registrar evento
                                 # Adicionar nova linha ao DataFrame de eventos
                                 new_event = {
-                                    'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                                    'order_id': userInput,
-                                    'event_type': 'edit_recipient_postal_code',
-                                    'timestamp': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                    'login': Manager,
-                                    'details': f"Código postal do destinatário alterado para: {new_ZP1}-{new_ZP2}"
-                                }
+                                            'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                                            'order_id': userInput,
+                                            'event_type': 'edit_recipient_name',
+                                            'staptime_1': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # ← tua coluna
+                                            'staptime_2': '',          
+                                            'login': Manager,
+                                            'details': f"Código postal do destinatário alterado para: {new_ZP1}-{new_ZP2}",
+                                            'latitude': '',             
+                                            'longitude': '',       
+                                            }
                                 order_events_df = pd.concat([order_events_df, pd.DataFrame([new_event])], ignore_index=True)
                                 save_order_events(order_events_df)
                                 
@@ -269,13 +283,16 @@ while MenuInitial:
 
                                                 #Registrar evento
                                                 new_event = {
-                                                    'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                                                    'order_id': userInput,
-                                                    'event_type': 'auto_validate_order',
-                                                    'timestamp': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                                    'login': Manager,
-                                                    'details': "Encomenda validada automaticamente pelo sistema."
-                                                }
+                                                            'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                                                            'order_id': userInput,
+                                                            'event_type': 'edit_recipient_name',
+                                                            'staptime_1': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # ← tua coluna
+                                                            'staptime_2': '',          
+                                                            'login': Manager,
+                                                            'details': "Encomenda validada automaticamente pelo sistema.",
+                                                            'latitude': '',             
+                                                            'longitude': '',       
+                                                            }
                                                 order_events_df = pd.concat([order_events_df, pd.DataFrame([new_event])], ignore_index=True)
                                                 save_order_events(order_events_df)
                                                 editMenu = False
@@ -329,13 +346,16 @@ while MenuInitial:
                                                                                                                                             
                                                                 #Registo de Evento:
                                                                 new_event = {
-                                                                        'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                                                                        'order_id': userInput,
-                                                                        'event_type': 'auto_validate_order',
-                                                                        'timestamp': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                                                        'login': Manager,
-                                                                        'details': "Encomenda preparada parcialmente com sucesso."
-                                                                    }
+                                                                            'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                                                                            'order_id': userInput,
+                                                                            'event_type': 'edit_recipient_name',
+                                                                            'staptime_1': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # ← tua coluna
+                                                                            'staptime_2': '',          
+                                                                            'login': Manager,
+                                                                            'details': "Encomenda preparada parcialmente com sucesso.",
+                                                                            'latitude': '',             
+                                                                            'longitude': '',       
+                                                                            }
 
                                                                 order_events_df = pd.concat([order_events_df, pd.DataFrame([new_event])], ignore_index=True)
                                                                 save_order_events(order_events_df)
@@ -369,13 +389,16 @@ while MenuInitial:
 
                                                     #Registrar evento
                                                     new_event = {
-                                                        'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
-                                                        'order_id': userInput,
-                                                        'event_type': 'edit_recipient_address',
-                                                        'timestamp': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                                        'login': Manager,
-                                                        'details': f"Morada do destinatário alterada para: {new_address}"
-                                                    }
+                                                                'event_id': 'EV' + dtime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                                                                'order_id': userInput,
+                                                                'event_type': 'edit_recipient_name',
+                                                                'staptime_1': dtime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # ← tua coluna
+                                                                'staptime_2': '',          
+                                                                'login': Manager,
+                                                                'details': f"Morada do destinatário alterada para: {new_address}",
+                                                                'latitude': '',             
+                                                                'longitude': '',       
+                                                                }
                                                     order_events_df = pd.concat([order_events_df, pd.DataFrame([new_event])], ignore_index=True)
                                                     save_order_events(order_events_df)
                                                     print("Voltando ao menu de edição...")
@@ -411,7 +434,7 @@ while MenuInitial:
             i = 0
             total_orders = len(validated_orders)
             print("\n======================================")
-            print(f"=== Total de encomendas validadas: {total_orders}===")
+            print(f"= Total de encomendas validadas: {total_orders} =")
             print("======================================")
 
 
@@ -461,7 +484,7 @@ while MenuInitial:
             i = 0
             total_orders = len(canceled_orders)
             print("\n======================================")
-            print(f"=== Total de encomendas canceladas: {total_orders}===")
+            print(f"= Total de encomendas canceladas: {total_orders} =")
             print("======================================")
 
 
@@ -498,4 +521,85 @@ while MenuInitial:
                     i = total_orders
 
     elif option == '4':
-        pass
+
+        validated_orders = orders_df[orders_df['order_status'].isin(['validated', 'partially shipped'])].reset_index(drop=True)
+
+        if validated_orders.empty:
+            print("\nNão existem encomendas validadas ou parcialmente enviadas.\n")
+            continue
+
+        i = 0
+        total_orders = len(validated_orders)
+
+        # Filtrar só as que NÃO têm estafeta atribuído
+        unassigned_orders = validated_orders[validated_orders['id_worker'].isna() | (validated_orders['id_worker'].str.strip() == '') | (validated_orders['id_worker'].str.lower() == 'nan')].reset_index(drop=True)
+
+        if unassigned_orders.empty:
+            print("\n✅ Não existem encomendas pendentes por asignar estafeta.\n")
+            continue
+
+        i = 0
+        total_orders = len(unassigned_orders)
+
+        while i < total_orders:
+            order = unassigned_orders.iloc[i]
+
+            print("\n======================================")
+            print(f"ID: {order['order_id']}")
+            print(f"Destinatário: {order['name']} | Contacto: {order['contact']}")
+            print(f"Morada: {order['address']}")
+            print(f"Código Postal: {order['ZP1']}-{order['ZP2']}")
+            print("======================================\n")
+
+            if i < total_orders - 1:
+                # Não é a última
+                while True:
+                    print("\nOpções:")
+                    print("1. Atribuir estafeta automaticamente")
+                    print("2. Próxima encomenda")
+                    print("3. Sair")
+                    resp = input("Opção: ").strip()
+
+                    if resp == '1':
+                        df_user_worker = load_user_work_profil()
+                        estafeta, zone = ut.code_zone(int(order['ZP1']), df_zone, df_user_worker)
+                        
+                        orders_df.loc[orders_df['order_id'] == order['order_id'], 'id_worker'] = estafeta
+                        save_orders(orders_df)
+                        
+                        print(f"✅ Estafeta {estafeta} ({zone}) atribuído à encomenda {order['order_id']}")
+                        i += 1
+                        break
+
+                    elif resp == '2':
+                        i += 1
+                        break
+
+                    elif resp == '3':
+                        print("A regressar ao menu inicial...")
+                        i = total_orders
+                        break
+
+                    else:
+                        print("Opção inválida. Escolha 1, 2 ou 3.")
+
+            else:
+                # É a última encomenda
+                while True:
+                    print("\nEscolha uma das seguintes opções:")
+                    print("1. Atribuir estafeta automaticamente")
+                    resp = input("2. Sair").strip()
+
+                    if resp == '1':
+                        df_user_worker = load_user_work_profil()
+                        estafeta, zone = ut.code_zone(int(order['ZP1']), df_zone, df_user_worker)
+                        
+                        orders_df.loc[orders_df['order_id'] == order['order_id'], 'id_worker'] = estafeta
+                        save_orders(orders_df)
+                        
+                        print(f"✅ Estafeta {estafeta} ({zone}) atribuído à encomenda {order['order_id']}")
+                    elif resp == '2':
+                        break
+                    else:
+                        print("Opção inválida. Escolha 1 ou 2.")
+        
